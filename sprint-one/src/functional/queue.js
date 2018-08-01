@@ -18,7 +18,7 @@ var Queue = function () {
   };
 
   someInstance.dequeue = function () {
-    let lowestKey = someInstance.size() 
+    let lowestKey = someInstance.size(); 
     let value;
     for (let key in storage) {
       if (lowestKey > Number(key)) {

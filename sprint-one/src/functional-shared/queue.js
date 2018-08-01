@@ -44,5 +44,5 @@ queueMethods.size = function () {
     counter++;
   }
   return counter;
-}
+};
 
