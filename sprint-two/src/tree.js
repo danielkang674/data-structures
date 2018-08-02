@@ -42,7 +42,7 @@ treeMethods.contains = function (target) {
 /*
  * Complexity: What is the time complexity of the above functions?
  * 
- * addChild should be constant IF treeMethods does not change because of the functional-shared methods.
+ * addChild should be constant IF treeMethods does not change because of the functional-shared style.
  * IF IT DOES change, then it is linear to how many methods are added/subtracted to treeMethods.
  * 
  * contains is linear because it checks every node.
