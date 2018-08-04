@@ -2,7 +2,7 @@ describe('tree', function () {
   var tree;
 
   beforeEach(function () {
-    tree = Tree();
+    tree = Tree(3);
   });
 
   it('should have methods named "addChild" and "contains", and a property named "value"', function () {
@@ -48,5 +48,13 @@ describe('tree', function () {
     tree.children[1].addChild(8);
     tree.children[0].children[0].addChild(9);
     expect(tree.contains(9)).to.equal(true);
+  });
+
+  it('should have a parent property', function () {
+    expect(tree.parent).to.equal(null);
+    tree.addChild(5);
+    expect(tree.children[0].parent.value).to.equal(3);
+    tree.children[0].addChild(7);
+    expect(tree.children[0].children[0].parent.value).to.equal(5);
   });
 });
