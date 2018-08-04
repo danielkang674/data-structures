@@ -3,6 +3,8 @@
 var HashTable = function () {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
+  this._size = 0;
+  this._ratio = 0.70;
 };
 
 HashTable.prototype.insert = function (k, v) {
@@ -21,6 +23,10 @@ HashTable.prototype.insert = function (k, v) {
   }
   if (doIpush) {
     bucket.push([k, v]);
+    this._size++;
+  }
+  if ((this._size / this._limit) >= this._ratio) {
+    this.double();
   }
 };
 
@@ -28,9 +34,11 @@ HashTable.prototype.retrieve = function (k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   let container = this._storage.get(index);
   let value;
-  for (let i = 0; i < container.length; i++) {
-    if (container[i][0] === k) {
-      value = container[i][1];
+  if (container) {
+    for (let i = 0; i < container.length; i++) {
+      if (container[i][0] === k) {
+        value = container[i][1];
+      }
     }
   }
   return value;
@@ -39,14 +47,50 @@ HashTable.prototype.retrieve = function (k) {
 HashTable.prototype.remove = function (k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   let container = this._storage.get(index);
-  for (let i = 0; i < container.length; i++) {
-    if (container[i][0] === k) {
-      delete container[i][0];
+  if (container) {
+    for (let i = 0; i < container.length; i++) {
+      if (container[i][0] === k) {
+        container.splice(i, 1);
+        this._size--;
+      }
+    }
+  }
+  if ((this._size / this._limit) <= (1 - this._ratio)) {
+    this.halve();
+  }
+};
+
+HashTable.prototype.double = function () {
+  let oldLimit = this._limit;
+  let oldStorage = this._storage;
+  this._limit *= 2;
+  this._storage = LimitedArray(this._limit);
+  this._size = 0;
+  for (let i = 0; i < oldLimit; i++) {
+    let bucket = oldStorage.get(i);
+    if (bucket) {
+      for (let j = 0; j < bucket.length; j++) {
+        this.insert(bucket[j][0], bucket[j][1]);
+      }
     }
   }
 };
 
-
+HashTable.prototype.halve = function () {
+  let oldLimit = this._limit;
+  let oldStorage = this._storage;
+  this._limit = Math.floor(this._limit / 2);
+  this._storage = LimitedArray(this._limit);
+  this._size = 0;
+  for (let i = 0; i < oldLimit; i++) {
+    let bucket = oldStorage.get(i);
+    if (bucket) {
+      for (let j = 0; j < bucket.length; j++) {
+        this.insert(bucket[j][0], bucket[j][1]);
+      }
+    }
+  }
+};
 
 /*
  * Complexity: What is the time complexity of the above functions?
