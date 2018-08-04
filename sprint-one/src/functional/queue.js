@@ -3,39 +3,29 @@ var Queue = function () {
 
   // Use an object with numeric keys to store values
   var storage = {};
+  someInstance.front = 0;
+  someInstance.back = 0;
 
   // Implement the methods below
 
   someInstance.enqueue = function (value) {
-    let size = someInstance.size();
-    let highestKey = size;
-    for (let key in storage) {
-      if (highestKey <= Number(key)) {
-        highestKey = Number(key) + 1;
-      }
-    }
-    storage[highestKey] = value;
+    storage[someInstance.back] = value;
+    someInstance.back++;
   };
 
   someInstance.dequeue = function () {
-    let lowestKey = someInstance.size(); 
     let value;
-    for (let key in storage) {
-      if (lowestKey > Number(key)) {
-        lowestKey = Number(key);
-      }
+    if (someInstance.front <= someInstance.back) {
+      value = storage[someInstance.front];
+      delete storage[someInstance.front];
+      someInstance.front++;
     }
-    value = storage[lowestKey];
-    delete storage[lowestKey];
     return value;
   };
 
   someInstance.size = function () {
-    let counter = 0;
-    for (let key in storage) {
-      counter++;
-    }
-    return counter;
+    let length = someInstance.back - someInstance.front;
+    return length < 0 ? 0 : length;
   };
 
   return someInstance;

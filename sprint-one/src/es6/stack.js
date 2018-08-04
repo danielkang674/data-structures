@@ -3,26 +3,27 @@ class Stack {
   // but try not not reference your old code in writing the new style.
   constructor() {
     this.storage = {};
+    this.length = 0;
   }
 
   push(value) {
     let tail = this.size();
     this.storage[tail] = value;
+    this.length++;
   }
 
   pop() {
     let tail = this.size();
     let value = this.storage[tail - 1];
-    delete this.storage[tail - 1];
+    if (value !== undefined) {
+      this.length--;
+      delete this.storage[tail - 1];
+    }
     return value;
   }
 
   size() {
-    let counter = 0;
-    for (let key in this.storage) {
-      counter++;
-    }
-    return counter;
+    return this.length;
   }
 }
 

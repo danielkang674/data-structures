@@ -2,37 +2,28 @@ var Queue = function () {
   // Hey! Rewrite in the new style. Your code will wind up looking very similar,
   // but try not not reference your old code in writing the new style.
   this.storage = {};
+  this.front = 0;
+  this.back = 0;
 };
 
 let anotherInstance = new Queue();
 
 Queue.prototype.enqueue = function (value) {
-  let tail = this.size();
-  for (let key in this.storage) {
-    if (tail <= Number(key)) {
-      tail = Number(key);
-    }
-  }
-  this.storage[tail + 1] = value;
+  this.storage[this.back] = value;
+  this.back++;
 };
 
 Queue.prototype.dequeue = function () {
-  let head = this.size();
   let value;
-  for (let key in this.storage) {
-    if (head >= Number(key)) {
-      head = Number(key);
-    }
+  if (this.front <= this.back) {
+    value = this.storage[this.front];
+    delete this.storage[this.front];
+    this.front++;
   }
-  value = this.storage[head];
-  delete this.storage[head];
   return value;
 };
 
 Queue.prototype.size = function () {
-  let counter = 0;
-  for (let key in this.storage) {
-    counter++;
-  }
-  return counter;
+  let length = this.back - this.front;
+  return length < 0 ? 0 : length;
 };
