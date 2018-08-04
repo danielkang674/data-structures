@@ -4,13 +4,15 @@ var DoublyLinkedList = function () {
 };
 
 DoublyLinkedList.prototype.addToTail = function (value) {
+  let tempNode = this.createNode(value);
   if (this.tail === null && this.head === null) {
-    this.head = this.createNode(value);
-    this.tail = this.head;
+    this.head = tempNode;
+    this.tail = tempNode;
   } else {
-    let temp = this.createNode(value);
-    this.tail.next = temp;
-    this.tail = temp;
+    let previousNode = this.tail;
+    this.tail.next = tempNode;
+    this.tail = tempNode;
+    this.tail.previous = previousNode;
   }
 };
 
@@ -18,15 +20,15 @@ DoublyLinkedList.prototype.removeHead = function () {
   if (this.head === null) {
     return null;
   }
+  let temp = this.head.value;
   if (this.head.next === null) {
-    let temp = this.head.value;
     this.head = null;
     this.tail = null;
     return temp;
   }
-  let temp = this.createNode(this.head.value);
   this.head = this.head.next;
-  return temp.value;
+  this.head.previous = null;
+  return temp;
 };
 
 DoublyLinkedList.prototype.contains = function (target) {
@@ -51,8 +53,37 @@ DoublyLinkedList.prototype.createNode = function (value) {
 
   node.value = value;
   node.next = null;
+  node.previous = null;
 
   return node;
+};
+
+DoublyLinkedList.prototype.addToHead = function (value) {
+  let newNode = this.createNode(value);
+  if (this.head === null && this.tail === null) {
+    this.head = newNode;
+    this.tail = newNode;
+  } else {
+    let tempNext = this.head;
+    this.head.previous = newNode;
+    this.head = newNode;
+    this.head.next = tempNext;
+  }
+};
+
+DoublyLinkedList.prototype.removeTail = function () {
+  if (this.tail === null) {
+    return null;
+  }
+  let tempValue = this.tail.value;
+  if (this.tail.previous === null) {
+    this.head = null;
+    this.tail = null;
+    return tempValue;
+  }
+  this.tail = this.tail.previous;
+  this.tail.next = null;
+  return tempValue;
 };
 
 /*
