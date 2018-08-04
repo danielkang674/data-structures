@@ -57,4 +57,18 @@ describe('tree', function () {
     tree.children[0].addChild(7);
     expect(tree.children[0].children[0].parent.value).to.equal(5);
   });
+
+  it('should remove pointers in both directions when "removeFromParent" is called', function () {
+    tree.addChild(5);
+    tree.addChild(7);
+    tree.addChild(8);
+    tree.children[0].addChild(9);
+    expect(tree.children[0].value).to.equal(5);
+    expect(tree.children[1].value).to.equal(7);
+    expect(tree.children[2].value).to.equal(8);
+    expect(tree.children[0].children[0].value).to.equal(9);
+    let removedChild = tree.children[0].children[0];
+    tree.children[0].children[0].removeFromParent();
+    expect(removedChild.parent).to.equal(null);
+  });
 });
