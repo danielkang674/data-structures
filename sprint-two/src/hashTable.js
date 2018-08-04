@@ -4,7 +4,7 @@ var HashTable = function () {
   this._limit = 8;
   this._storage = LimitedArray(this._limit);
   this._size = 0;
-  this._ratio = 0.70;
+  this._ratio = 0.75;
 };
 
 HashTable.prototype.insert = function (k, v) {
@@ -25,7 +25,7 @@ HashTable.prototype.insert = function (k, v) {
     bucket.push([k, v]);
     this._size++;
   }
-  if ((this._size / this._limit) >= this._ratio) {
+  if ((this._size / this._limit) > this._ratio) {
     this.double();
   }
 };
@@ -55,7 +55,7 @@ HashTable.prototype.remove = function (k) {
       }
     }
   }
-  if ((this._size / this._limit) <= (1 - this._ratio)) {
+  if ((this._size / this._limit) < (1 - this._ratio)) {
     this.halve();
   }
 };
