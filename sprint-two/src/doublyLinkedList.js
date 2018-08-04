@@ -1,7 +1,7 @@
 var DoublyLinkedList = function () {
   this.head = null;
   this.tail = null;
-}
+};
 
 DoublyLinkedList.prototype.addToTail = function (value) {
   if (this.tail === null && this.head === null) {
